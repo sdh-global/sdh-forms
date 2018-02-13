@@ -1,7 +1,7 @@
 import warnings
 from django import forms
 from django.utils import six
-from django.template import Context, loader
+from django.template import loader
 
 
 def object_to_string(obj):
@@ -50,16 +50,15 @@ class BaseForm(object):
             _template_name = self.get_template_name()
         else:
             _template_name = self.template
-        " Helper function for fieldsting fields data from form. "
-        bound_fields = [forms.forms.BoundField(self, field, name) for name, field \
-                        in self.fields.items()]
+        " Helper function for fieldstring fields data from form. "
+        bound_fields = [forms.forms.BoundField(self, field, name) for name, field in self.fields.items()]
 
-        c = Context(dict(form=self, bound_fields=bound_fields))
+        c = dict(form=self, bound_fields=bound_fields)
         t = loader.get_template(_template_name)
         return t.render(c)
 
     def as_template(self):
-        "{{ form.as_template }}"
+        """" {{ form.as_template }} """
         for field in self.fields.keys():
             self.fields[field].str_class = str(self.fields[field].widget.__class__.__name__)
         return self.output_via_template()
