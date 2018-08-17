@@ -16,7 +16,7 @@ setup(
     package_dir={'': 'src'},
     entry_points={},
     eager_resources=['sdh'],
-    version='1.0.2',
+    version='1.1.0',
     install_requires=['Django>=1.8', ],
     license='BSD License',
     include_package_data=True,
@@ -39,5 +39,6 @@ setup(
         'Topic :: Software Development :: Libraries'],
     description='Alternative package for rendering tables',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
-    url='https://bitbucket.org/ua2crm/sdh-forms',
+    url='https://bitbucket.org/sdh-llc/sdh-forms',
 )
+

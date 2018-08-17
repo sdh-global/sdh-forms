@@ -37,6 +37,42 @@ class DatePickerWidget(DateInput):
         return attrs
 
 
+class Select2AjaxWidget(forms.Select):
+    def __init__(self, attrs=None, choices=None, add_empty=False, **kwargs):
+        self.add_empty = add_empty
+        self.choices = choices and list(choices) or []
+        if attrs is not None:
+            self.attrs = attrs.copy()
+        else:
+            self.attrs = {}
+        self.data_url = kwargs.pop('data_url', None)
+        super(Select2AjaxWidget, self).__init__(attrs=None, choices=choices)
+        self.choices_callback = None
+
+    def build_attrs(self, *args, **kwargs):
+        """
+        Set select2's AJAX attributes.
+        """
+        attrs = super(Select2AjaxWidget, self).build_attrs(*args, **kwargs)
+        if 'class' in attrs:
+            attrs['class'] += ' select2'
+        else:
+            attrs['class'] = 'select2'
+        if self.add_empty:
+            attrs.setdefault('data-allow-clear', 'true')
+        else:
+            attrs.setdefault('data-allow-clear', 'false')
+        attrs.setdefault('data-ajax--url', self.data_url)
+        attrs.setdefault('data-ajax--cache', 'false')
+        attrs.setdefault('data-ajax--type', 'GET')
+        attrs.setdefault('data-minimum-input-length', 0)
+        return attrs
+
+    def render(self, name, value, attrs=None, renderer=None):
+        self.choices = list(self.choices_callback())
+        return super(Select2AjaxWidget, self).render(name, value, attrs, renderer)
+
+
 class LabelWidget(Select):
     def render(self, name, value, attrs=None, choices=()):
         if value is None: value = ''

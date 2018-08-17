@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.forms import TypedChoiceField, ChoiceField, DateTimeField
 from django.shortcuts import _get_queryset
 
-from .widgets import SelectCallback
+from .widgets import SelectCallback, Select2AjaxWidget
 
 
 class RelatedChoiceField(TypedChoiceField):
@@ -71,6 +71,15 @@ class RelatedChoiceField(TypedChoiceField):
             value = _get_field(item, self.value_name or 'pk')
             choices.append((str(value), label))
         return choices
+
+
+class AjaxTypedChoiceField(RelatedChoiceField):
+    widget = Select2AjaxWidget
+
+    def __init__(self, model, data_url=None, *args, **kwargs):
+        self.data_url = data_url
+        self.widget = Select2AjaxWidget(data_url=self.data_url, **kwargs)
+        super(AjaxTypedChoiceField, self).__init__(model, *args, **kwargs)
 
 
 class DateTimeNaiveField(DateTimeField):

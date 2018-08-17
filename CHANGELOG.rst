@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 1.1.0
+ * Added Select2AjaxWidget and AjaxTypedChoiceField
+
 version 1.0.1
 
 * Added backward compatibility with method get_template_name with raising deprecated warnings
