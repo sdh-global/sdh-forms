@@ -37,10 +37,10 @@ class DatePickerWidget(DateInput):
         return attrs
 
 
-class Select2AjaxWidget(forms.Select):
-    def __init__(self, attrs=None, choices=None, add_empty=False, **kwargs):
+class Select2AjaxWidget(Select):
+    def __init__(self, attrs=None, choices=(), add_empty=False, **kwargs):
         self.add_empty = add_empty
-        self.choices = choices and list(choices) or []
+        self.choices = list(choices)
         if attrs is not None:
             self.attrs = attrs.copy()
         else:
