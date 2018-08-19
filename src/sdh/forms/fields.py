@@ -43,6 +43,10 @@ class RelatedChoiceField(TypedChoiceField):
             self._choices_data = self.populate()
         return self._choices_data
 
+    @choices.setter
+    def choices(self, value):
+        self._choices_data = value
+
     def populate(self):
         choices = []
         if self.add_empty:

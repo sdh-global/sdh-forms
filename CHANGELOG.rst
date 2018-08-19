@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 1.1.2
+ * Added RelatedChoiceField.choices setter
+
 version 1.1.0
  * Added Select2AjaxWidget and AjaxTypedChoiceField
 
