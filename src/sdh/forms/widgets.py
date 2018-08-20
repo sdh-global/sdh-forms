@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from itertools import chain
-from django.forms import Select, DateInput
+from django.forms import Select, SelectMultiple, DateInput
 
 try:
     from django.forms import util
@@ -73,6 +73,10 @@ class Select2AjaxWidget(Select):
         return super(Select2AjaxWidget, self).render(name, value, attrs, renderer)
 
 
+class Select2AjaxMultipleWidget(Select2AjaxWidget, SelectMultiple):
+    pass
+
+
 class LabelWidget(Select):
     def render(self, name, value, attrs=None, choices=()):
         if value is None: value = ''
@@ -119,3 +123,4 @@ else:
 
     class RadioSelectTemplated(dj_widgets.RadioSelect):
         template = 'sdh/forms/radio.html'
+

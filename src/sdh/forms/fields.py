@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-from django.forms import TypedChoiceField, ChoiceField, DateTimeField
+from django.forms import TypedChoiceField, TypedMultipleChoiceField, ChoiceField, DateTimeField
 from django.shortcuts import _get_queryset
 
-from .widgets import SelectCallback, Select2AjaxWidget
+from .widgets import SelectCallback, Select2AjaxWidget, Select2AjaxMultipleWidget
 
 
-class RelatedChoiceField(TypedChoiceField):
+class RelatedChoiceFieldMixin(object):
     widget = SelectCallback
 
     def __init__(self, model, add_empty=False,
@@ -77,6 +77,14 @@ class RelatedChoiceField(TypedChoiceField):
         return choices
 
 
+class RelatedChoiceField(RelatedChoiceFieldMixin, TypedChoiceField):
+    pass
+
+
+class RelatedMultipleChoiceField(RelatedChoiceFieldMixin, TypedMultipleChoiceField):
+    pass
+
+
 class AjaxTypedChoiceField(RelatedChoiceField):
     widget = Select2AjaxWidget
 
@@ -84,6 +92,15 @@ class AjaxTypedChoiceField(RelatedChoiceField):
         self.data_url = data_url
         self.widget = Select2AjaxWidget(data_url=self.data_url, **kwargs)
         super(AjaxTypedChoiceField, self).__init__(model, *args, **kwargs)
+
+
+class AjaxTypedMultipleChoiceField(RelatedMultipleChoiceField):
+    widget = Select2AjaxMultipleWidget
+
+    def __init__(self, model, data_url=None, *args, **kwargs):
+        self.data_url = data_url
+        self.widget = Select2AjaxMultipleWidget(data_url=self.data_url, **kwargs)
+        super(AjaxTypedMultipleChoiceField, self).__init__(model, *args, **kwargs)
 
 
 class DateTimeNaiveField(DateTimeField):

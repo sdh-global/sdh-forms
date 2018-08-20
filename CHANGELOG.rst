@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 1.2.0
+ * Added RelatedMultipleChoiceField; code refactoring
+
 version 1.1.2
  * Added RelatedChoiceField.choices setter
 
