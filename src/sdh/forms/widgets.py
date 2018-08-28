@@ -24,6 +24,10 @@ class SelectCallback(Select):
         return super(SelectCallback, self).render(name, value, attrs)
 
 
+class SelectCallbackMultiple(SelectCallback, SelectMultiple):
+    pass
+
+
 class DatePickerWidget(DateInput):
     def build_attrs(self, extra_attrs=None, **kwargs):
         attrs = super(DatePickerWidget, self).build_attrs(extra_attrs, **kwargs)

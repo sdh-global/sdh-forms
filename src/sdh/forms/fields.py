@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.forms import TypedChoiceField, TypedMultipleChoiceField, ChoiceField, DateTimeField
 from django.shortcuts import _get_queryset
 
-from .widgets import SelectCallback, Select2AjaxWidget, Select2AjaxMultipleWidget
+from .widgets import SelectCallback, SelectCallbackMultiple, Select2AjaxWidget, Select2AjaxMultipleWidget
 
 
 class RelatedChoiceFieldMixin(object):
@@ -156,7 +156,7 @@ class RelatedChoiceField(RelatedChoiceFieldMixin, TypedChoiceField):
 
 
 class RelatedMultipleChoiceField(RelatedChoiceFieldMixin, TypedMultipleChoiceField):
-    pass
+    widget = SelectCallbackMultiple
 
 
 class AjaxTypedChoiceField(AjaxChoiceFieldMixin, TypedChoiceField):
