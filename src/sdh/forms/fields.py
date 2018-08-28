@@ -16,7 +16,7 @@ class RelatedChoiceFieldMixin(object):
         self.model = model
         self.add_empty = add_empty
         self.label_name = label_name
-        self.value_name = value_name
+        self.value_name = value_name or 'pk'
         self.empty_label = empty_label
         self.empty_value = empty_value
         self.coerce = coerce or self.model_coerce
@@ -32,7 +32,7 @@ class RelatedChoiceFieldMixin(object):
         return result
 
     def model_coerce(self, value):
-        return _get_queryset(self.model).get(pk=value)
+        return _get_queryset(self.model).get(**{self.value_name: value})
 
     def choices_callback(self):
         return self.choices
@@ -72,9 +72,83 @@ class RelatedChoiceFieldMixin(object):
 
         for item in qs:
             label = _get_field(item, self.label_name)
-            value = _get_field(item, self.value_name or 'pk')
+            value = _get_field(item, self.value_name)
             choices.append((str(value), label))
         return choices
+
+
+class AjaxChoiceFieldMixin(object):
+    widget = Select2AjaxWidget
+
+    def __init__(self, model, add_empty=False, label_name=None, value_name=None,
+                 data_url=None, coerce=None, filter=None, **kwargs):
+        self.model = model
+        self.label_name = label_name
+        self.value_name = value_name or 'pk'
+        self.filter = filter
+        super(AjaxChoiceFieldMixin, self).__init__(**kwargs)
+        self.coerce = coerce or self.model_coerce
+        self.add_empty = add_empty
+        self.data_url = data_url
+        self._request = None
+
+    def model_coerce(self, value):
+        return _get_queryset(self.model).get(**{self.value_name: value})
+
+    @property
+    def add_empty(self):
+        return self._add_empty
+
+    @add_empty.setter
+    def add_empty(self, value):
+        # Setting add_empty also sets the add_empty on the widget.
+        self._add_empty = self.widget.add_empty = value
+
+    @property
+    def data_url(self):
+        return self._data_url
+
+    @data_url.setter
+    def data_url(self, value):
+        # Setting data_url also sets the data_url on the widget.
+        self._data_url = self.widget.data_url = value
+
+    @staticmethod
+    def _get_field(obj, field_name=None):
+        if field_name:
+            value = getattr(obj, field_name)
+            if callable(value):
+                value = value()
+        else:
+            value = str(obj)
+        return value
+
+    def ajax_populate(self, form, name):
+        _choices = []
+        value = form.get_value_for(name)
+
+        qs = _get_queryset(self.model)
+
+        if self.filter:
+            if callable(self.filter):
+                _data = self.filter(self._request)
+            else:
+                _data = self.filter
+            qs = qs.filter(**_data)
+
+        if value is not None:
+            if not isinstance(value, (list, tuple)):
+                value = [value]
+            qs = qs.filter(**{'%s__in' % self.value_name: value})
+        else:
+            qs = qs.none()
+
+        for item in qs:
+            label = self._get_field(item, self.label_name)
+            value = self._get_field(item, self.value_name)
+            _choices.append((str(value), label))
+
+        self.choices = _choices
 
 
 class RelatedChoiceField(RelatedChoiceFieldMixin, TypedChoiceField):
@@ -85,22 +159,12 @@ class RelatedMultipleChoiceField(RelatedChoiceFieldMixin, TypedMultipleChoiceFie
     pass
 
 
-class AjaxTypedChoiceField(RelatedChoiceField):
+class AjaxTypedChoiceField(AjaxChoiceFieldMixin, TypedChoiceField):
     widget = Select2AjaxWidget
 
-    def __init__(self, model, data_url=None, *args, **kwargs):
-        self.data_url = data_url
-        self.widget = Select2AjaxWidget(data_url=self.data_url, **kwargs)
-        super(AjaxTypedChoiceField, self).__init__(model, *args, **kwargs)
 
-
-class AjaxTypedMultipleChoiceField(RelatedMultipleChoiceField):
+class AjaxTypedMultipleChoiceField(AjaxChoiceFieldMixin, TypedMultipleChoiceField):
     widget = Select2AjaxMultipleWidget
-
-    def __init__(self, model, data_url=None, *args, **kwargs):
-        self.data_url = data_url
-        self.widget = Select2AjaxMultipleWidget(data_url=self.data_url, **kwargs)
-        super(AjaxTypedMultipleChoiceField, self).__init__(model, *args, **kwargs)
 
 
 class DateTimeNaiveField(DateTimeField):

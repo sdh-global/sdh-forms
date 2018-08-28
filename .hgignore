@@ -8,4 +8,5 @@ syntax: glob
 .\#*
 .idea/
 dist/
+env/
 src/*.egg-info/
