@@ -1,5 +1,7 @@
 Changelog
 =========
+version 1.2.1
+ * prevent populate choices for ajax select widget
 
 version 1.2.0
  * Added RelatedMultipleChoiceField; code refactoring
