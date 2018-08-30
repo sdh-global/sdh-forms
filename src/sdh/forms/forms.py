@@ -68,6 +68,7 @@ class RequestForm(BaseForm, forms.Form):
                     self.initial[fieldname] = attr.pk
                 else:
                     self.initial[fieldname] = attr
+        self.ajax_fields_populate()
 
 
 class SaveModelForm(RequestForm):

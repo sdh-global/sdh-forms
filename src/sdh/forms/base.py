@@ -31,6 +31,13 @@ class BaseForm(object):
         for field in six.itervalues(self.fields):
             field._request = self.request
 
+        self.ajax_fields_populate()
+
+    def ajax_fields_populate(self):
+        for name, field in six.iteritems(self.fields):
+            if hasattr(field, 'ajax_populate'):
+                field.ajax_populate(self, name)
+
     @property
     def request(self):
         return self._request
@@ -65,18 +72,18 @@ class BaseForm(object):
 
     def populate(self, field_name, queryset, add_empty=False, label_name=None,
                  value_name=None, empty_label=None, empty_value=None):
-        """ Pupulate choice field by given QuerySet
+        """ Populate choice field by given QuerySet
         Args:
             field_name: field name in form (as string)
-            queryset: QierySet object
+            queryset: QuerySet object
             add_empty: if set to True function prepend list of
                 choices by empty line
-            label_name: name of field, propery or method in queryset
+            label_name: name of field, property or method in queryset
                 instance model, that will be set as label in dropdown
-            value_name: name of field, propery or method in queryset
+            value_name: name of field, property or method in queryset
                 instance model, that will be set as value in dropdown
             empty_label: value, that will be set for empty line,
-                by defaylt it set to '-------'
+                by default it set to '-------'
             empty_value: value, that will be set for empty line,
                 by default it set to ''
 

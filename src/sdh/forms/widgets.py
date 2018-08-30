@@ -24,6 +24,10 @@ class SelectCallback(Select):
         return super(SelectCallback, self).render(name, value, attrs)
 
 
+class SelectCallbackMultiple(SelectCallback, SelectMultiple):
+    pass
+
+
 class DatePickerWidget(DateInput):
     def build_attrs(self, extra_attrs=None, **kwargs):
         attrs = super(DatePickerWidget, self).build_attrs(extra_attrs, **kwargs)
@@ -38,16 +42,11 @@ class DatePickerWidget(DateInput):
 
 
 class Select2AjaxWidget(Select):
-    def __init__(self, attrs=None, choices=(), add_empty=False, **kwargs):
+
+    def __init__(self, attrs=None, choices=(), add_empty=False, data_url=None, **kwargs):
         self.add_empty = add_empty
-        self.choices = list(choices)
-        if attrs is not None:
-            self.attrs = attrs.copy()
-        else:
-            self.attrs = {}
-        self.data_url = kwargs.pop('data_url', None)
-        super(Select2AjaxWidget, self).__init__(attrs=None, choices=choices)
-        self.choices_callback = None
+        self.data_url = data_url
+        super(Select2AjaxWidget, self).__init__(attrs=attrs, choices=choices)
 
     def build_attrs(self, *args, **kwargs):
         """
@@ -67,10 +66,6 @@ class Select2AjaxWidget(Select):
         attrs.setdefault('data-ajax--type', 'GET')
         attrs.setdefault('data-minimum-input-length', 0)
         return attrs
-
-    def render(self, name, value, attrs=None, renderer=None):
-        self.choices = list(self.choices_callback())
-        return super(Select2AjaxWidget, self).render(name, value, attrs, renderer)
 
 
 class Select2AjaxMultipleWidget(Select2AjaxWidget, SelectMultiple):
@@ -123,4 +118,3 @@ else:
 
     class RadioSelectTemplated(dj_widgets.RadioSelect):
         template = 'sdh/forms/radio.html'
-
