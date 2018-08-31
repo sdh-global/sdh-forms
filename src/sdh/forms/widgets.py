@@ -61,7 +61,8 @@ class Select2AjaxWidget(Select):
             attrs.setdefault('data-allow-clear', 'true')
         else:
             attrs.setdefault('data-allow-clear', 'false')
-        attrs.setdefault('data-ajax--url', self.data_url)
+        if self.data_url:
+            attrs.setdefault('data-ajax--url', self.data_url)
         attrs.setdefault('data-ajax--cache', 'false')
         attrs.setdefault('data-ajax--type', 'GET')
         attrs.setdefault('data-minimum-input-length', 0)
