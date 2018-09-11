@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-from django.forms import TypedChoiceField, TypedMultipleChoiceField, ChoiceField, DateTimeField
+from django.core import validators
+from django.forms import ChoiceField, MultipleChoiceField, TypedChoiceField, TypedMultipleChoiceField, DateTimeField
 from django.shortcuts import _get_queryset
 
 from .widgets import SelectCallback, SelectCallbackMultiple, Select2AjaxWidget, Select2AjaxMultipleWidget
@@ -80,20 +81,16 @@ class RelatedChoiceFieldMixin(object):
 class AjaxChoiceFieldMixin(object):
     widget = Select2AjaxWidget
 
-    def __init__(self, model, add_empty=False, label_name=None, value_name=None,
-                 data_url=None, coerce=None, filter=None, **kwargs):
+    def __init__(self, model, add_empty=False, label_name=None,
+                 value_name=None, data_url=None, filter=None, **kwargs):
         self.model = model
         self.label_name = label_name
         self.value_name = value_name or 'pk'
         self.filter = filter
         super(AjaxChoiceFieldMixin, self).__init__(**kwargs)
-        self.coerce = coerce or self.model_coerce
         self.add_empty = add_empty
         self.data_url = data_url
         self._request = None
-
-    def model_coerce(self, value):
-        return _get_queryset(self.model).get(**{self.value_name: value})
 
     @property
     def add_empty(self):
@@ -136,7 +133,7 @@ class AjaxChoiceFieldMixin(object):
                 _data = self.filter
             qs = qs.filter(**_data)
 
-        if value is not None:
+        if value not in validators.EMPTY_VALUES:
             if not isinstance(value, (list, tuple)):
                 value = [value]
             qs = qs.filter(**{'%s__in' % self.value_name: value})
@@ -147,8 +144,17 @@ class AjaxChoiceFieldMixin(object):
             label = self._get_field(item, self.label_name)
             value = self._get_field(item, self.value_name)
             _choices.append((str(value), label))
-
         self.choices = _choices
+
+
+class AjaxTypedChoiceFieldMixin(AjaxChoiceFieldMixin):
+
+    def __init__(self, model, coerce=None, **kwargs):
+        super(AjaxTypedChoiceFieldMixin, self).__init__(model, **kwargs)
+        self.coerce = coerce or self.model_coerce
+
+    def model_coerce(self, value):
+        return _get_queryset(self.model).get(**{self.value_name: value})
 
 
 class RelatedChoiceField(RelatedChoiceFieldMixin, TypedChoiceField):
@@ -159,11 +165,19 @@ class RelatedMultipleChoiceField(RelatedChoiceFieldMixin, TypedMultipleChoiceFie
     widget = SelectCallbackMultiple
 
 
-class AjaxTypedChoiceField(AjaxChoiceFieldMixin, TypedChoiceField):
+class AjaxChoiceField(AjaxChoiceFieldMixin, ChoiceField):
     widget = Select2AjaxWidget
 
 
-class AjaxTypedMultipleChoiceField(AjaxChoiceFieldMixin, TypedMultipleChoiceField):
+class AjaxMultipleChoiceField(AjaxChoiceFieldMixin, MultipleChoiceField):
+    widget = Select2AjaxMultipleWidget
+
+
+class AjaxTypedChoiceField(AjaxTypedChoiceFieldMixin, TypedChoiceField):
+    widget = Select2AjaxWidget
+
+
+class AjaxTypedMultipleChoiceField(AjaxTypedChoiceFieldMixin, TypedMultipleChoiceField):
     widget = Select2AjaxMultipleWidget
 
 
