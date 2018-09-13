@@ -1,5 +1,8 @@
 Changelog
 =========
+version 1.2.2
+ * add AjaxChoice fields
+
 version 1.2.1
  * prevent populate choices for ajax select widget
 
