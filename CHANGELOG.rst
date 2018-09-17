@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 2.0.1
+ * fix imports
+
 version 2.0.0
  * drop prior Django 1.11 compatibility
  * fix LabelWidget work with Django 1.11
