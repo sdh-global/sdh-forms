@@ -1,5 +1,10 @@
 Changelog
 =========
+
+version 2.0.0
+ * drop prior Django 1.11 compatibility
+ * fix LabelWidget work with Django 1.11
+
 version 1.2.2
  * add AjaxChoice fields
 
