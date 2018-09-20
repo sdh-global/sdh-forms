@@ -1,6 +1,16 @@
 Changelog
 =========
 
+version 2.2.0
+ * added SdhFormRenderer
+   for override default Django settings use
+   ```
+   FORM_RENDERER = 'sdh.forms.renderers.SdhFormRenderer'
+   ```
+
+   Renderered settings placed under SDH_RENDERER option in the settings.py
+
+
 version 2.1.0
  * improved LabelWidget
  * fixed default field template
