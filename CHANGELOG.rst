@@ -1,6 +1,10 @@
 Changelog
 =========
 
+version 2.1.0
+ * improved LabelWidget
+ * fixed default field template
+
 version 2.0.1
  * fix imports
 
