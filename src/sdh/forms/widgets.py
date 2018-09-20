@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 
-from django.forms import Select, SelectMultiple, DateInput
+from django.forms.widgets import Input, Select, SelectMultiple, DateInput
 
 
 class SelectCallback(Select):
@@ -62,5 +62,58 @@ class Select2AjaxMultipleWidget(Select2AjaxWidget, SelectMultiple):
     pass
 
 
-class LabelWidget(Select):
-    template_name = 'sdh/forms/widgets/label_select.html'
+class LabelWidget(Input):
+    input_type = 'hidden'
+    template_name = 'sdh/forms/widgets/label_input.html'
+
+    def __init__(self, attrs=None, choices=()):
+        super(LabelWidget, self).__init__(attrs)
+        # choices can be any iterable, but we may need to render this widget
+        # multiple times. Thus, collapse it into a list so it can be consumed
+        # more than once.
+        self.choices = list(choices)
+
+    def get_context(self, name, value, attrs):
+        context = super(Input, self).get_context(name, value, attrs)
+        context['widget']['type'] = self.input_type
+        context['widget']['label'] = self.get_label(context['widget']['value'])
+        return context
+
+    def get_label(self, value):
+        for v, l in self.choices:
+            if v == value:
+                return l
+        return value
+
+
+class MultipleLabelWidget(LabelWidget):
+    template_name = 'sdh/forms/widgets/multiple_label_input.html'
+
+    def get_context(self, name, value, attrs):
+        context = super(LabelWidget, self).get_context(name, value, attrs)
+        final_attrs = context['widget']['attrs']
+        id_ = context['widget']['attrs'].get('id')
+
+        subwidgets = []
+        for index, value_ in enumerate(context['widget']['value']):
+            widget_attrs = final_attrs.copy()
+            if id_:
+                # An ID attribute was given. Add a numeric index as a suffix
+                # so that the inputs don't all have the same ID attribute.
+                widget_attrs['id'] = '%s_%s' % (id_, index)
+            widget = LabelWidget(choices=self.choices)
+            widget.is_required = self.is_required
+            subwidgets.append(widget.get_context(name, value_, widget_attrs)['widget'])
+
+        context['widget']['subwidgets'] = subwidgets
+        return context
+
+    def value_from_datadict(self, data, files, name):
+        try:
+            getter = data.getlist
+        except AttributeError:
+            getter = data.get
+        return getter(name)
+
+    def format_value(self, value):
+        return [] if value is None else value

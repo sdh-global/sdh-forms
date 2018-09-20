@@ -1,2 +1,0 @@
-<span class="label_widget" name="{{ widget.name }}">{% if widget.label != None %} {{ widget.label.0 }} {% else %} {{ widget.value.0 }} {% endif %}</span>
-<input type="hidden" name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value.0 }}"{% endif %}{% include "django/forms/widgets/attrs.html" %} />
