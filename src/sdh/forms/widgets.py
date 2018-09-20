@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.forms.widgets import Input, Select, SelectMultiple, DateInput
+from django.utils import formats
 
 
 class SelectCallback(Select):
@@ -18,21 +20,21 @@ class SelectCallbackMultiple(SelectCallback, SelectMultiple):
 
 
 class DatePickerWidget(DateInput):
-    def build_attrs(self, extra_attrs=None, **kwargs):
-        attrs = super(DatePickerWidget, self).build_attrs(extra_attrs, **kwargs)
-        attrs['class'] = attrs.get('class', '') + ' date-picker'
+    DATE_PICKER_FORMAT = 'DATEPICKER_FORMAT'
+
+    def build_attrs(self, base_attrs, extra_attrs=None):
+        attrs = super(DatePickerWidget, self).build_attrs(base_attrs, extra_attrs)
+        attrs['class'] = attrs.get('class', '') + ' datepicker form-control'
         attrs['data-date-autoclose'] = 'true'
-        attrs['data-date-format'] = self.format.replace('y', 'yy')\
-            .replace('Y', 'yyyy')\
-            .replace('M', 'mm')\
-            .replace('D', 'dd')\
-            .replace('%', '')
+        date_format = formats.get_format(self.DATE_PICKER_FORMAT)
+        attrs['data-date-format'] = getattr(settings, self.DATE_PICKER_FORMAT,
+                                            'YYYY-MM-DD') if date_format == self.DATE_PICKER_FORMAT else date_format
         return attrs
 
 
 class Select2AjaxWidget(Select):
 
-    def __init__(self, attrs=None, choices=(), add_empty=False, data_url=None, **kwargs):
+    def __init__(self, attrs=None, choices=(), add_empty=False, data_url=None):
         self.add_empty = add_empty
         self.data_url = data_url
         super(Select2AjaxWidget, self).__init__(attrs=attrs, choices=choices)
