@@ -20,11 +20,12 @@ class SelectCallbackMultiple(SelectCallback, SelectMultiple):
 
 
 class DatePickerWidget(DateInput):
-    DATE_PICKER_FORMAT = 'DATEPICKER_FORMAT'
+    DATE_PICKER_FORMAT = 'DATE_PICKER_FORMAT'
+    DATE_PICKER_CLASS = getattr(settings, 'DATE_PICKER_CLASS', 'date-picker')
 
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super(DatePickerWidget, self).build_attrs(base_attrs, extra_attrs)
-        attrs['class'] = attrs.get('class', '') + ' datepicker form-control'
+        attrs['class'] = attrs.get('class', '') + ' %s' % self.DATE_PICKER_CLASS
         attrs['data-date-autoclose'] = 'true'
         date_format = formats.get_format(self.DATE_PICKER_FORMAT)
         attrs['data-date-format'] = getattr(settings, self.DATE_PICKER_FORMAT,
@@ -68,11 +69,12 @@ class LabelWidget(Input):
     input_type = 'hidden'
     template_name = 'sdh/forms/widgets/label_input.html'
 
-    def __init__(self, attrs=None, choices=()):
+    def __init__(self, attrs=None, choices=(), empty_label=None):
         super(LabelWidget, self).__init__(attrs)
         # choices can be any iterable, but we may need to render this widget
         # multiple times. Thus, collapse it into a list so it can be consumed
         # more than once.
+        self.empty_label = empty_label or ''
         self.choices = list(choices)
 
     def get_context(self, name, value, attrs):
@@ -85,7 +87,7 @@ class LabelWidget(Input):
         for v, l in self.choices:
             if v == value:
                 return l
-        return value
+        return value or self.empty_label
 
 
 class MultipleLabelWidget(LabelWidget):
@@ -103,7 +105,7 @@ class MultipleLabelWidget(LabelWidget):
                 # An ID attribute was given. Add a numeric index as a suffix
                 # so that the inputs don't all have the same ID attribute.
                 widget_attrs['id'] = '%s_%s' % (id_, index)
-            widget = LabelWidget(choices=self.choices)
+            widget = LabelWidget(choices=self.choices, empty_label=self.empty_label)
             widget.is_required = self.is_required
             subwidgets.append(widget.get_context(name, value_, widget_attrs)['widget'])
 
