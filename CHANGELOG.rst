@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 2.2.1
+ * change hidden behavior for LabelWidget
+
 version 2.2.0
  * added SdhFormRenderer
    for override default Django settings use

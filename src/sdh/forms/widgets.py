@@ -66,7 +66,7 @@ class Select2AjaxMultipleWidget(Select2AjaxWidget, SelectMultiple):
 
 
 class LabelWidget(Input):
-    input_type = 'hidden'
+    input_type = 'text'
     template_name = 'sdh/forms/widgets/label_input.html'
 
     def __init__(self, attrs=None, choices=(), empty_label=None):
