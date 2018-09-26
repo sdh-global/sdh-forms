@@ -89,6 +89,10 @@ class LabelWidget(Input):
                 return l
         return value or self.empty_label
 
+    @property
+    def is_hidden(self):
+        return False
+
 
 class MultipleLabelWidget(LabelWidget):
     template_name = 'sdh/forms/widgets/multiple_label_input.html'
