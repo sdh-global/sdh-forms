@@ -1,4 +1,6 @@
-from django.forms import formsets
+from django.forms import formsets, IntegerField, BooleanField
+from django.utils.translation import ugettext_lazy as _
+from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 
 
 class RequestFormSet(formsets.BaseFormSet):
@@ -45,3 +47,16 @@ class RequestFormSet(formsets.BaseFormSet):
             request=self._request)
         self.add_fields(form, None)
         return form
+
+    def add_fields(self, form, index):
+        """A hook for adding extra fields on to each form instance."""
+        if self.can_order:
+            # Only pre-fill the ordering field for initial forms.
+            if index is not None and index < self.initial_form_count() and ORDERING_FIELD_NAME not in form.fields:
+                form.fields[ORDERING_FIELD_NAME] = IntegerField(label=_('Order'), initial=index + 1, required=False)
+            elif index is not None and index < self.initial_form_count() and ORDERING_FIELD_NAME in form.fields:
+                form.fields[ORDERING_FIELD_NAME].initial = index + 1
+            elif ORDERING_FIELD_NAME not in form.fields:
+                form.fields[ORDERING_FIELD_NAME] = IntegerField(label=_('Order'), required=False)
+        if self.can_delete and DELETION_FIELD_NAME not in form.fields:
+            form.fields[DELETION_FIELD_NAME] = BooleanField(label=_('Delete'), required=False)
