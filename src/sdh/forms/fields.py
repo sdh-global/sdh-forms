@@ -134,9 +134,12 @@ class AjaxChoiceFieldMixin(object):
             qs = qs.filter(**_data)
 
         if value not in validators.EMPTY_VALUES:
-            if not isinstance(value, (list, tuple)):
-                value = [value]
-            qs = qs.filter(**{'%s__in' % self.value_name: value})
+            if isinstance(value, self.model):
+                qs = qs.filter(**{self.value_name: getattr(value, self.value_name)})
+            else:
+                if not isinstance(value, (list, tuple)):
+                    value = [value]
+                qs = qs.filter(**{'%s__in' % self.value_name: value})
         else:
             qs = qs.none()
 
