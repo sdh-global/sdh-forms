@@ -16,7 +16,7 @@ setup(
     package_dir={'': 'src'},
     entry_points={},
     eager_resources=['sdh'],
-    version='2.2.1',
+    version='2.2.2',
     install_requires=['Django>=1.11', ],
     license='BSD License',
     include_package_data=True,

@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 2.2.2
+ * fix populate values for AjaxChoiceFieldMixin
+
 version 2.2.1
  * change hidden behavior for LabelWidget
 
