@@ -71,7 +71,7 @@ class RelatedChoiceFieldMixin(object):
                 _data = self.filter
             qs = qs.filter(**_data)
 
-        for item in qs:
+        for item in qs.all():
             label = _get_field(item, self.label_name)
             value = _get_field(item, self.value_name)
             choices.append((str(value), label))

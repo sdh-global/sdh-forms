@@ -1,6 +1,9 @@
 Changelog
 =========
 
+version 2.2.3
+ * fix caching query result in RelatedChoiceFieldMixin
+
 version 2.2.2
  * fix populate values for AjaxChoiceFieldMixin
 
