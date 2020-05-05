@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.core import validators
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.forms import ChoiceField, MultipleChoiceField, TypedChoiceField, TypedMultipleChoiceField, DateTimeField
 from django.shortcuts import _get_queryset
 
@@ -175,6 +176,16 @@ class AjaxMultipleChoiceField(AjaxChoiceFieldMixin, MultipleChoiceField):
 
 class AjaxTypedChoiceField(AjaxTypedChoiceFieldMixin, TypedChoiceField):
     widget = Select2AjaxWidget
+
+    def _coerce(self, value):
+        try:
+            return super(AjaxTypedChoiceField, self)._coerce(value)
+        except ObjectDoesNotExist:
+            raise ValidationError(
+                self.error_messages['invalid_choice'],
+                code='invalid_choice',
+                params={'value': value},
+            )
 
 
 class AjaxTypedMultipleChoiceField(AjaxTypedChoiceFieldMixin, TypedMultipleChoiceField):
