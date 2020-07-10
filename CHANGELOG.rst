@@ -1,5 +1,8 @@
 Changelog
 =========
+version 2.2.6
+ * added template tag sdh_split_column
+
 version 2.2.5
  * fix Many2Many relations
 
