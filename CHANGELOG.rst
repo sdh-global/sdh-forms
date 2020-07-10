@@ -1,5 +1,10 @@
 Changelog
 =========
+version 2.2.5
+ * fix Many2Many relations
+
+version 2.2.4
+ * disable HTML require field option by default
 
 version 2.2.3
  * fix caching query result in RelatedChoiceFieldMixin

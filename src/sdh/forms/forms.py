@@ -34,6 +34,8 @@ class RequestForm(BaseForm, forms.Form):
                         setattr(instance, key, data[key])
                     else:
                         setattr(instance, key, None)
+                elif isinstance(field, models.ManyToManyField):
+                    getattr(instance, key).set(data[key])
                 else:
                     setattr(instance, key, data[key])
 
