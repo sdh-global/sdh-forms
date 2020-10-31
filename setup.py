@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.2.7'
+version = '2.2.8'
 
 setup(
     name='sdh.forms',
@@ -14,7 +14,7 @@ setup(
     package_dir={'': 'src'},
     entry_points={},
     eager_resources=['sdh'],
-    version='2.2.7',
+    version=version,
     install_requires=['Django>=2.2', ],
     license='BSD License',
     include_package_data=True,
