@@ -1,5 +1,9 @@
 Changelog
 =========
+version 2.2.7
+ * AjaxTypedChoiceField catch ObjectDoesNotExists and raise validation error
+
+
 version 2.2.6
  * added template tag sdh_split_column
 
