@@ -71,7 +71,7 @@ class RelatedChoiceFieldMixin(object):
                 _data = self.filter
             qs = qs.filter(**_data)
 
-        for item in qs:
+        for item in qs.all():
             label = _get_field(item, self.label_name)
             value = _get_field(item, self.value_name)
             choices.append((str(value), label))
@@ -134,9 +134,12 @@ class AjaxChoiceFieldMixin(object):
             qs = qs.filter(**_data)
 
         if value not in validators.EMPTY_VALUES:
-            if not isinstance(value, (list, tuple)):
-                value = [value]
-            qs = qs.filter(**{'%s__in' % self.value_name: value})
+            if isinstance(value, self.model):
+                qs = qs.filter(**{self.value_name: getattr(value, self.value_name)})
+            else:
+                if not isinstance(value, (list, tuple)):
+                    value = [value]
+                qs = qs.filter(**{'%s__in' % self.value_name: value})
         else:
             qs = qs.none()
 

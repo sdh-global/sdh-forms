@@ -12,6 +12,8 @@ def object_to_string(obj):
 
 
 class BaseForm(object):
+    use_required_attribute = False
+
     _ref_class = None
     template = 'sdh/forms/form.html'
 
