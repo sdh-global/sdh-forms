@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.forms.widgets import Input, Select, SelectMultiple, DateInput
 from django.utils import formats
@@ -7,7 +5,7 @@ from django.utils import formats
 
 class SelectCallback(Select):
     def __init__(self, attrs=None):
-        super(Select, self).__init__(attrs)
+        super().__init__(attrs)
         self.choices_callback = None
 
     def render(self, name, value, attrs=None, renderer=None):
@@ -38,7 +36,7 @@ class Select2AjaxWidget(Select):
     def __init__(self, attrs=None, choices=(), add_empty=False, data_url=None):
         self.add_empty = add_empty
         self.data_url = data_url
-        super(Select2AjaxWidget, self).__init__(attrs=attrs, choices=choices)
+        super().__init__(attrs=attrs, choices=choices)
 
     def build_attrs(self, *args, **kwargs):
         """
@@ -70,7 +68,7 @@ class LabelWidget(Input):
     template_name = 'sdh/forms/widgets/label_input.html'
 
     def __init__(self, attrs=None, choices=(), empty_label=None):
-        super(LabelWidget, self).__init__(attrs)
+        super().__init__(attrs)
         # choices can be any iterable, but we may need to render this widget
         # multiple times. Thus, collapse it into a list so it can be consumed
         # more than once.

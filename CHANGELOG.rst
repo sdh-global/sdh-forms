@@ -2,7 +2,8 @@ Changelog
 =========
 version 2.2.7
  * AjaxTypedChoiceField catch ObjectDoesNotExists and raise validation error
-
+ * remove python2 compatibility
+ * minimal Django version 2.2
 
 version 2.2.6
  * added template tag sdh_split_column

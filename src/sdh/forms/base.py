@@ -4,14 +4,7 @@ from django.utils import six
 from django.template import loader
 
 
-def object_to_string(obj):
-    if six.PY3:
-        return str(obj)
-    else:
-        return unicode(obj)
-
-
-class BaseForm(object):
+class BaseForm:
     use_required_attribute = False
 
     _ref_class = None
@@ -103,7 +96,7 @@ class BaseForm(object):
                 if callable(value):
                     value = value()
             else:
-                value = object_to_string(obj)
+                value = str(obj)
             return value
 
         for item in queryset:
@@ -112,8 +105,7 @@ class BaseForm(object):
             else:
                 label = _get_field(item, label_name)
             value = _get_field(item, value_name or 'pk')
-            field.choices.append((object_to_string(value),
-                                  label))
+            field.choices.append((str(value), label))
 
     def set_field_error(self, field_name, error):
         warnings.warn("Calling init method is Deprecated. Please use add_error method", DeprecationWarning)

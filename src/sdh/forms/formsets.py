@@ -8,7 +8,7 @@ class RequestFormSet(formsets.BaseFormSet):
         self._request = kwargs.pop('request', None)
         self.form_args = kwargs.pop('args', [])
 
-        super(RequestFormSet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _construct_form(self, i, **kwargs):
         """

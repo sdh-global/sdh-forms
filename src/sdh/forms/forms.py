@@ -2,6 +2,7 @@ from django import forms
 from django.db import models
 from django.db.models.fields import Field, FieldDoesNotExist
 from django.db.models.manager import Manager
+
 from .base import BaseForm
 
 
@@ -78,7 +79,7 @@ class SaveModelForm(RequestForm):
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.pop('instance', None)
-        super(RequestForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.instance:
             self.set_initial(self.instance)
 

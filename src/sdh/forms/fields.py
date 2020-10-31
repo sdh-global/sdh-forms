@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.core import validators
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.forms import ChoiceField, MultipleChoiceField, TypedChoiceField, TypedMultipleChoiceField, DateTimeField
@@ -79,7 +77,7 @@ class RelatedChoiceFieldMixin(object):
         return choices
 
 
-class AjaxChoiceFieldMixin(object):
+class AjaxChoiceFieldMixin:
     widget = Select2AjaxWidget
 
     def __init__(self, model, add_empty=False, label_name=None,
