@@ -1,5 +1,6 @@
 import warnings
 from django import forms
+from django.forms import BoundField
 from django.utils import six
 from django.template import loader
 
@@ -53,7 +54,7 @@ class BaseForm:
         else:
             _template_name = self.template
         " Helper function for fieldstring fields data from form. "
-        bound_fields = [forms.forms.BoundField(self, field, name) for name, field in self.fields.items()]
+        bound_fields = [BoundField(self, field, name) for name, field in self.fields.items()]
 
         c = dict(form=self, bound_fields=bound_fields)
         t = loader.get_template(_template_name)
