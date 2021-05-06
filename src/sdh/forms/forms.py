@@ -1,6 +1,12 @@
 from django import forms
 from django.db import models
-from django.db.models.fields import Field, FieldDoesNotExist
+from django.db.models.fields import Field
+
+try:
+    from django.db.models.fields import FieldDoesNotExist
+except ImportError:
+    from django.core.exceptions import FieldDoesNotExist
+
 from django.db.models.manager import Manager
 
 from .base import BaseForm
