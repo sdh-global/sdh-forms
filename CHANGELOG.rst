@@ -1,5 +1,11 @@
 Changelog
 =========
+
+version 2.3.0
+ * added sdh.form.conf module with option to manage default empty label
+ * added compatibility for Django 3.2
+ * removed python2 compatibility
+
 version 2.2.8
  * remove python2 compatibility
  * minimal Django version 2.2
@@ -31,7 +37,6 @@ version 2.2.0
    ```
    FORM_RENDERER = 'sdh.forms.renderers.SdhFormRenderer'
    ```
-
    Renderered settings placed under SDH_RENDERER option in the settings.py
 
 

@@ -33,7 +33,7 @@ class RequestForm(BaseForm, forms.Form):
                 field = instance._meta.get_field(key)
                 if isinstance(field, (models.ImageField, models.FileField)):
                     if data[key] is not None:
-                        if data[key] == False:
+                        if data[key] is False:
                             data[key] = None
                         setattr(instance, key, data[key])
                 elif isinstance(field, (models.ForeignKey, models.IPAddressField, models.GenericIPAddressField)):

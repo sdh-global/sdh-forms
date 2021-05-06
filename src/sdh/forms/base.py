@@ -1,8 +1,9 @@
 import warnings
+
 from django import forms
 from django.forms import BoundField
-from django.utils import six
 from django.template import loader
+from .conf import settings
 
 
 class BaseForm:
@@ -24,13 +25,13 @@ class BaseForm:
 
         super(self._ref_class, self).__init__(*kargs, **kwargs)
 
-        for field in six.itervalues(self.fields):
+        for field in self.fields.values():
             field._request = self.request
 
         self.ajax_fields_populate()
 
     def ajax_fields_populate(self):
-        for name, field in six.iteritems(self.fields):
+        for name, field in self.fields.items():
             if hasattr(field, 'ajax_populate'):
                 field.ajax_populate(self, name)
 
@@ -79,7 +80,7 @@ class BaseForm:
             value_name: name of field, property or method in queryset
                 instance model, that will be set as value in dropdown
             empty_label: value, that will be set for empty line,
-                by default it set to '-------'
+                by default it set to settings.DEFAULT_CHOICE_LABEL
             empty_value: value, that will be set for empty line,
                 by default it set to ''
 
@@ -89,7 +90,7 @@ class BaseForm:
         field.choices = []
         if add_empty:
             field.choices.append((empty_value or '',
-                                  empty_label if empty_label is not None else '-------'))
+                                  empty_label if empty_label is not None else settings.DEFAULT_CHOICE_LABEL))
 
         def _get_field(obj, fieldname=None):
             if fieldname:

@@ -4,9 +4,10 @@ from django.forms import ChoiceField, MultipleChoiceField, TypedChoiceField, Typ
 from django.shortcuts import _get_queryset
 
 from .widgets import SelectCallback, SelectCallbackMultiple, Select2AjaxWidget, Select2AjaxMultipleWidget
+from .conf import settings
 
 
-class RelatedChoiceFieldMixin(object):
+class RelatedChoiceFieldMixin:
     widget = SelectCallback
 
     def __init__(self, model, add_empty=False,
@@ -51,7 +52,7 @@ class RelatedChoiceFieldMixin(object):
         choices = []
         if self.add_empty:
             choices.append((self.empty_value or '',
-                            self.empty_label or '-------'))
+                            self.empty_label or settings.DEFAULT_CHOICE_LABEL))
 
         def _get_field(obj, fieldname=None):
             if fieldname:
