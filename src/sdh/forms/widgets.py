@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.forms.widgets import Input, Select, SelectMultiple, DateInput
 from django.utils import formats
+from .conf import settings
 
 
 class SelectCallback(Select):
@@ -19,7 +20,7 @@ class SelectCallbackMultiple(SelectCallback, SelectMultiple):
 
 class DatePickerWidget(DateInput):
     DATE_PICKER_FORMAT = 'DATE_PICKER_FORMAT'
-    DATE_PICKER_CLASS = getattr(settings, 'DATE_PICKER_CLASS', 'date-picker')
+    DATE_PICKER_CLASS = settings.DATE_PICKER_CLASS
 
     def build_attrs(self, base_attrs, extra_attrs=None):
         attrs = super(DatePickerWidget, self).build_attrs(base_attrs, extra_attrs)

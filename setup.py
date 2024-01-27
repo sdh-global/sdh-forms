@@ -3,11 +3,11 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.3.0'
+version = '2.4.0'
 
 setup(
     name='sdh.forms',
-    url='https://bitbucket.org/sdh-llc/sdh-forms/',
+    url='https://github.com/sdh-global/sdh-forms',
     namespace_packages=['sdh'],
     packages=find_packages('src'),
     package_data={'': ['*.*']},
@@ -15,14 +15,14 @@ setup(
     entry_points={},
     eager_resources=['sdh'],
     version=version,
-    install_requires=['Django>=2.2', ],
+    install_requires=['Django>=3.2', ],
     license='BSD License',
     include_package_data=True,
     zip_safe=False,
     author='Software Development Hub LLC',
     author_email='dev-tools@sdh.com.ua',
     platforms=['OS Independent'],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -31,8 +31,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries'],

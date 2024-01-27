@@ -10,6 +10,7 @@ from django.conf import settings as django_settings
 
 DEFAULTS = {
     'DEFAULT_CHOICE_LABEL': '-------',
+    'DATE_PICKER_CLASS': 'date-picker',
 }
 
 

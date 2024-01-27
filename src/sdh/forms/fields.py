@@ -1,7 +1,10 @@
 from django.core import validators
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.forms import ChoiceField, MultipleChoiceField, TypedChoiceField, TypedMultipleChoiceField, DateTimeField
+from django.forms import (
+    ChoiceField, MultipleChoiceField, TypedChoiceField, TypedMultipleChoiceField, DateTimeField,
+    ModelChoiceField as _ModelChoiceField, )
 from django.shortcuts import _get_queryset
+from django.db.models.manager import Manager
 
 from .widgets import SelectCallback, SelectCallbackMultiple, Select2AjaxWidget, Select2AjaxMultipleWidget
 from .conf import settings
@@ -200,3 +203,29 @@ class DateTimeNaiveField(DateTimeField):
         if value:
             value = value.replace(tzinfo=None)
         return value
+
+
+class ModelChoiceField(_ModelChoiceField):
+    def __init__(self, *args, label_name=None, empty_label=None, **kwargs):
+        if empty_label is None:
+            empty_label = settings.DEFAULT_CHOICE_LABEL
+        self.label_name = label_name
+        super().__init__(*args, empty_label=empty_label, **kwargs)
+
+    def _recursive_value(self, obj, keylist):
+        value = None
+        if hasattr(obj, keylist[0]):
+            value = getattr(obj, keylist[0])
+            if isinstance(value, Manager):
+                return value
+            if callable(value):
+                value = value()
+            if len(keylist) > 1:
+                return self._recursive_value(value, keylist[1:])
+        return value
+
+    def label_from_instance(self, obj):
+        if self.label_name:
+            return self._recursive_value(obj, self.label_name.split('__'))
+
+        return str(obj)
