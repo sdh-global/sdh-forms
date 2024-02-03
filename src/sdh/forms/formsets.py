@@ -1,5 +1,5 @@
 from django.forms import formsets, IntegerField, BooleanField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.forms.formsets import ORDERING_FIELD_NAME, DELETION_FIELD_NAME
 
 
