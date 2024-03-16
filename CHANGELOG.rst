@@ -1,6 +1,15 @@
 Changelog
 =========
 
+version 2.4.1
+ * added support of Django 4.2
+ * moved build from setup.py to pyproject.toml
+
+
+version 2.4.0
+ * added option to select differect css-class for date-picker
+ * added ModelChoiceField
+
 version 2.3.0
  * added sdh.form.conf module with option to manage default empty label
  * added compatibility for Django 3.2
