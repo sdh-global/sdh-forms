@@ -87,10 +87,10 @@ class BaseForm:
         """
         field = self.fields[field_name]
 
-        field.choices = []
+        choices = []
         if add_empty:
-            field.choices.append((empty_value or '',
-                                  empty_label if empty_label is not None else settings.DEFAULT_CHOICE_LABEL))
+            choices.append((empty_value or '',
+                            empty_label if empty_label is not None else settings.DEFAULT_CHOICE_LABEL))
 
         def _get_field(obj, fieldname=None):
             if fieldname:
@@ -107,7 +107,9 @@ class BaseForm:
             else:
                 label = _get_field(item, label_name)
             value = _get_field(item, value_name or 'pk')
-            field.choices.append((str(value), label))
+            choices.append((str(value), label))
+
+        field.choices = choices
 
     def set_field_error(self, field_name, error):
         warnings.warn("Calling init method is Deprecated. Please use add_error method", DeprecationWarning)
