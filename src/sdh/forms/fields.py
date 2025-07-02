@@ -142,7 +142,10 @@ class AjaxChoiceFieldMixin:
             else:
                 if not isinstance(value, (list, tuple)):
                     value = [value]
-                qs = qs.filter(**{'%s__in' % self.value_name: value})
+                try:
+                    qs = qs.filter(**{'%s__in' % self.value_name: value})
+                except ValidationError:
+                    qs = qs.none()
         else:
             qs = qs.none()
 
