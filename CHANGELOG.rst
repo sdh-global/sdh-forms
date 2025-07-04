@@ -1,10 +1,12 @@
 Changelog
 =========
 
+version 2.4.2
+  * added support of Django 5
+
 version 2.4.1
  * added support of Django 4.2
  * moved build from setup.py to pyproject.toml
-
 
 version 2.4.0
  * added option to select differect css-class for date-picker
